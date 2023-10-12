@@ -1,14 +1,14 @@
-import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import io
+import streamlit as st
 
 def add_caption(image, caption, font_path, font_size, font_color, position):
-    draw = PIL.ImageDraw.Draw(image)
+    draw = ImageDraw.Draw(image)
     try:
-        font = PIL.ImageFont.truetype(font_path, font_size)
+        font = ImageFont.truetype(font_path, font_size)
     except IOError:
-        font = PIL.ImageFont.load_default()
+        font = ImageFont.load_default()
 
     lines = caption.split('\n')
     y_text = position[1]
