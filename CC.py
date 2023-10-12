@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import io
 
