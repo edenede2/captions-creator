@@ -3,23 +3,23 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import io
 
-def add_caption(image, caption, font_size, font_color, position):
+def add_caption(image, caption, font_path, font_size, font_color, position):
     draw = ImageDraw.Draw(image)
     try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+        font = ImageFont.truetype(font_path, font_size)
     except IOError:
         font = ImageFont.load_default()
+        print("Using default font")
+
 
     lines = caption.split('\n')
     y_text = position[1]
     for line in lines:
-        width, height = draw.textsize(line, font)
+        width, height = draw.textsize(line, font=font)
         # Draw text
         draw.text(((image.size[0] - width) / 2, y_text), line, font=font, fill=font_color)
         y_text += height
     return image
-
-
 
 st.title("Caption Creator")
 
@@ -29,15 +29,23 @@ if uploaded_image is not None:
     image = Image.open(uploaded_image)
     st.image(image, caption="Uploaded Image.", use_column_width=True)
     
-    caption = st.text_input("Caption:", "Type here...")
+    caption = st.text_area("Caption:", "Type here...")  # Changed from text_input to text_area
     
+    font_choice = st.selectbox(
+        "Choose a font:", 
+        [
+            "fonts/PermanentMarker-Regular.ttf", 
+            "fonts/ArchitectsDaughter-Regular.ttf", 
+            "fonts/Lumanosimo-Regular.ttf"
+        ]
+    )  # New Font Choice, with the correct path
     font_size = st.slider("Font Size:", 10, 100, 40)
     font_color = st.color_picker("Pick A Font Color:", "#000000")
     
     position = st.slider("Caption Position (X, Y):", 0, image.size[1], (0, int(image.size[1]*0.9)))
     
     if st.button("Add Caption"):
-        image_with_caption = add_caption(image.copy(), caption, font_size, font_color, position)
+        image_with_caption = add_caption(image.copy(), caption, font_choice, font_size, font_color, position)  # Updated to include font_choice
         st.image(image_with_caption, caption="Image with Caption.", use_column_width=True)
         
         # Prepare image download
@@ -51,3 +59,4 @@ if uploaded_image is not None:
             file_name="image_with_caption.jpg",
             mime="image/jpeg",
         )
+
