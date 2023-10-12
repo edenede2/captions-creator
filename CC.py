@@ -5,8 +5,8 @@ import streamlit as st
 
 def add_caption(image, captions):
     for caption in captions:
-        draw = ImageDraw.Draw(image)
         font_path, font_size, font_color, position = caption['font'], caption['size'], caption['color'], caption['position']
+        
         try:
             font = ImageFont.truetype(font_path, font_size)
         except IOError:
@@ -14,11 +14,20 @@ def add_caption(image, captions):
 
         lines = caption['text'].split('\n')
         x, y = position
+
+        # Create a new image with alpha channel for the text
+        txt = Image.new('RGBA', image.size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(txt)
+
         for line in lines:
-            width, height = font.getsize(line)
-            draw.text((x, y), line, font=font, fill=font_color)
-            y += height
+            # Draw text
+            d.text((x, y), line, fill=font_color, font=font)
+            y += font.getsize(line)[1]
+
+        # Composite the text image with the original image
+        image = Image.alpha_composite(image.convert("RGBA"), txt)
     return image
+
 
 st.title("Caption Creator")
 
@@ -45,7 +54,9 @@ if uploaded_image is not None:
         font_size = st.slider(f"Caption {i+1} Font Size:", 10, 100, 40)
         font_color = st.color_picker(f"Caption {i+1} Font Color:", "#000000")
         alpha = st.slider(f"Caption {i+1} Transparency:", 0, 255, 255)
-        font_color += hex(alpha)[2:]  # Add alpha (transparency) to color
+        # Convert the hex color to RGBA
+        r, g, b = int(font_color[1:3], 16), int(font_color[3:5], 16), int(font_color[5:7], 16)
+        font_color = (r, g, b, alpha)
         x = st.slider(f"Caption {i+1} X Position:", 0, image.size[0], 0)
         y = st.slider(f"Caption {i+1} Y Position:", 0, image.size[1], 0)
 
