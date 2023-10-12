@@ -6,8 +6,16 @@ import io
 def add_caption(image, caption, font_size, font_color, position):
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
-    draw.text(position, caption, font=font, fill=font_color)
+    
+    lines = caption.split('\n')
+    y_text = position[1]
+    for line in lines:
+        width, height = draw.textsize(line, font=font)
+        # Draw text
+        draw.text(((image.size[0] - width) / 2, y_text), line, font=font, fill=font_color)
+        y_text += height
     return image
+
 
 st.title("Caption Creator")
 
