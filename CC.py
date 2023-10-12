@@ -5,8 +5,11 @@ import io
 
 def add_caption(image, caption, font_size, font_color, position):
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
-    
+    try:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+    except IOError:
+        font = ImageFont.load_default()
+
     lines = caption.split('\n')
     y_text = position[1]
     for line in lines:
