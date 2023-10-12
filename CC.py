@@ -4,20 +4,17 @@ import numpy as np
 import io
 
 def add_caption(image, caption, font_path, font_size, font_color, position):
-    draw = ImageDraw.Draw(image)
-    print(f"Draw type: {type(draw)}")  # Debug print
+    draw = PIL.ImageDraw.Draw(image)
     try:
-        font = ImageFont.truetype(font_path, font_size)
-        print(f"Font type: {type(font)}")  # Debug print
+        font = PIL.ImageFont.truetype(font_path, font_size)
     except IOError:
-        font = ImageFont.load_default()
-        print("Using default font")  # Debug print
+        font = PIL.ImageFont.load_default()
 
     lines = caption.split('\n')
     y_text = position[1]
     for line in lines:
         try:
-            width, height = draw.textsize(line, font=font)  # Check if this line throws the error
+            width, height = draw.getsize(line, font=font)  # Use getsize instead of textsize
         except AttributeError as e:
             print(f"AttributeError encountered: {e}")
             print(f"Available attributes: {dir(draw)}")  # Print available attributes for debugging
