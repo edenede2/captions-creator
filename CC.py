@@ -5,21 +5,28 @@ import io
 
 def add_caption(image, caption, font_path, font_size, font_color, position):
     draw = ImageDraw.Draw(image)
+    print(f"Draw type: {type(draw)}")  # Debug print
     try:
         font = ImageFont.truetype(font_path, font_size)
+        print(f"Font type: {type(font)}")  # Debug print
     except IOError:
         font = ImageFont.load_default()
-        print("Using default font")
-
+        print("Using default font")  # Debug print
 
     lines = caption.split('\n')
     y_text = position[1]
     for line in lines:
-        width, height = draw.textsize(line, font=font)
+        try:
+            width, height = draw.textsize(line, font=font)  # Check if this line throws the error
+        except AttributeError as e:
+            print(f"AttributeError encountered: {e}")
+            print(f"Available attributes: {dir(draw)}")  # Print available attributes for debugging
+            raise
         # Draw text
         draw.text(((image.size[0] - width) / 2, y_text), line, font=font, fill=font_color)
         y_text += height
     return image
+
 
 st.title("Caption Creator")
 
