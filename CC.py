@@ -14,7 +14,7 @@ def add_caption(image, caption, font_path, font_size, font_color, position):
     y_text = position[1]
     for line in lines:
         try:
-            width, height = draw.getsize(line, font=font)  # Use getsize instead of textsize
+            width, height = font.getsize(line)  # Corrected
         except AttributeError as e:
             print(f"AttributeError encountered: {e}")
             print(f"Available attributes: {dir(draw)}")  # Print available attributes for debugging
