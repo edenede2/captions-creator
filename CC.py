@@ -13,7 +13,10 @@ def add_caption(image, caption, font_size, font_color, position):
     lines = caption.split('\n')
     y_text = position[1]
     for line in lines:
-        width, height = ImageDraw.Draw(image).multiline_textsize(line, font=font)
+        # Manually calculate width and height
+        width = sum([font.getsize(char)[0] for char in line])
+        height = max([font.getsize(char)[1] for char in line])
+        
         # Draw text
         draw.text(((image.size[0] - width) / 2, y_text), line, font=font, fill=font_color)
         y_text += height
