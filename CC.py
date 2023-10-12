@@ -17,6 +17,7 @@ def add_caption(image, caption, font_size, font_color, position):
     return image
 
 
+
 st.title("Caption Creator")
 
 uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
