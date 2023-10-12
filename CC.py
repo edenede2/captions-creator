@@ -42,9 +42,9 @@ if uploaded_image is not None:
     font_choice = st.selectbox(
         "Choose a font:", 
         [
-            "fonts/PermanentMarker-Regular.ttf", 
-            "fonts/ArchitectsDaughter-Regular.ttf", 
-            "fonts/Lumanosimo-Regular.ttf"
+            "PermanentMarker-Regular.ttf", 
+            "ArchitectsDaughter-Regular.ttf", 
+            "Lumanosimo-Regular.ttf"
         ]
     )  # New Font Choice, with the correct path
     font_size = st.slider("Font Size:", 10, 100, 40)
