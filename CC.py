@@ -7,14 +7,18 @@ def add_caption(image, caption, font_path, font_size, font_color, position):
     draw = ImageDraw.Draw(image)
     try:
         font = ImageFont.truetype(font_path, font_size)
+        print(f"Custom font loaded with size {font_size}")  # Debugging line
     except IOError:
         font = ImageFont.load_default()
+        print("Using default font")  # Debugging line
+
+    print(f"Font size used for drawing: {font_size}")  # Debugging line
 
     lines = caption.split('\n')
     y_text = position[1]
     for line in lines:
         try:
-            width, height = font.getsize(line)  # Corrected
+            width, height = font.getsize(line)
         except AttributeError as e:
             print(f"AttributeError encountered: {e}")
             print(f"Available attributes: {dir(draw)}")  # Print available attributes for debugging
